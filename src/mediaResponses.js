@@ -2,22 +2,9 @@ const fs = require('fs');
 const path = require('path');
 
 const loadFile = (request, response, filePath, type) => {
-    /** The path module's resolve func creates a File obj.
-     *  The resolve func takes a dir and the rel path to a file from that dir.
-     *  This does NOT load the file, but just creates a File obj based on that file.
-    */
     const file = path.resolve(__dirname, filePath);
 
-    /** The fs module’s stat func provides stats abt the file. This is an async func.
-     *  The stat func takes a file obj and a callback func of what to do next.
-     *  When the stat func loads the file, it will then call the callback func that's been passed in. 
-    */
     fs.stat(file, (err, stats) => {
-        /** The callback of this func receives an err field and a stats object. 
-         *  If the err field is not null, then there was an error. In that event we will respond with an error. 
-         *  If the error code is ‘ENOENT’ (Error No Entry), then the file could not be found.
-         *  We will set the status code to 404.
-        */
         if (err) {
             if (err.code === 'ENOENT') {
                 response.writeHead(404);
